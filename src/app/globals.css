@@ -2,15 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Enhanced Deloitte-inspired color palette for Neighborly
+  - Deloitte Green: #86BC25
+  - Black: #1A1A1A
+  - White: #FFFFFF
+  - Blue Accent: #0072C6
+  - Light Gray: #F2F2F2
+  - Medium Gray: #CCCCCC
+  - Dark Gray: #666666
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F2F2F2;
+  --foreground: #1A1A1A;
+  --primary: #86BC25; /* Deloitte Green */
+  --primary-dark: #0072C6; /* Deloitte Blue */
+  --secondary: #CCCCCC; /* Medium Gray */
+  --accent: #0072C6; /* Blue Accent */
+  --border: #666666; /* Dark Gray */
+  --card-bg: #FFFFFF;
+  --card-border: #CCCCCC;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1A1A1A;
+    --foreground: #FFFFFF;
+    --primary: #86BC25;
+    --primary-dark: #0072C6;
+    --secondary: #CCCCCC;
+    --accent: #0072C6;
+    --border: #666666;
+    --card-bg: #232323;
+    --card-border: #333333;
   }
 }
 
@@ -18,4 +42,61 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+a, .link {
+  color: var(--primary);
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+a:hover, .link:hover {
+  color: var(--primary-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--foreground);
+  font-weight: 700;
+}
+
+hr, .border {
+  border-color: var(--border);
+}
+
+@layer base {
+  .font-logo {
+    font-family: 'Segoe UI', 'Montserrat', 'Poppins', 'Inter', Arial, Helvetica, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Animated green border snake effect for buttons */
+@keyframes border-snake {
+  0% {
+    box-shadow: 0 0 0 0 #86BC25, 0 0 0 0 #86BC25 inset;
+  }
+  25% {
+    box-shadow: 0 0 0 2px #86BC25, 0 0 0 0 #86BC25 inset;
+  }
+  50% {
+    box-shadow: 0 0 0 0 #86BC25, 0 0 0 2px #86BC25 inset;
+  }
+  75% {
+    box-shadow: 0 0 0 2px #86BC25, 0 0 0 0 #86BC25 inset;
+  }
+  100% {
+    box-shadow: 0 0 0 0 #86BC25, 0 0 0 0 #86BC25 inset;
+  }
+}
+.animate-border-snake {
+  animation: border-snake 1.5s linear infinite;
+}
+
+/* Utility classes for button backgrounds */
+button.btn-black {
+  background-color: #1A1A1A !important;
+  color: #fff !important;
+}
+button.btn-blue {
+  background-color: #0072C6 !important;
+  color: #fff !important;
 }
