@@ -1,9 +1,11 @@
-// Import the functions you need from the SDKs you need
+"use client";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
+import type { Analytics } from "firebase/analytics";
+import { useReducer } from 'react';
 
 
 // Your web app's Firebase configuration
@@ -12,8 +14,8 @@ const firebaseConfig = {
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "neighborly-eb04b.firebaseapp.com",
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "neighborly-eb04b",
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "neighborly-eb04b.firebasestorage.app",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "1000000000000",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:1000000000000:web:1234567890abcdef1234567890abcdef",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "563088836586",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:563088836586:web:8c9a90c351202298d11493",
 };
 
 // Initialize Firebase with error handling
@@ -30,7 +32,7 @@ try {
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 // Conditionally initialize Analytics only in browser environment with error handling
-export let analytics = null;
+export let analytics: Analytics | null = null;
 try {
   analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 } catch (error) {

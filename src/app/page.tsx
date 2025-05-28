@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Black_And_White_Picture } from "next/font/google";
 import { DefaultColors } from "tailwindcss/types/generated/colors";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 interface Post {
   [x: string]: ReactNode;
@@ -107,6 +108,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SpeedInsights />
       {/* Header */}
       <header className="bg-foreground text-white shadow-xl rounded-b-3xl">
         <div className="container mx-auto px-4 py-7 flex justify-between items-center">
