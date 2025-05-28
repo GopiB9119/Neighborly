@@ -8,13 +8,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
-  WEBSITE_NODE_DEFAULT_VERSION: process.env.WEBSITE_NODE_DEFAULT_VERSION || "",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDC3ZQL_UYMenQePI9Z7sER0izlAOfURL4",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "neighborly-eb04b.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "neighborly-eb04b",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "neighborly-eb04b.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "1000000000000",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:1000000000000:web:1234567890abcdef1234567890abcdef",
 };
 
 // Initialize Firebase with error handling
@@ -30,7 +29,12 @@ try {
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-// Conditionally initialize Analytics only in browser environment
-export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+// Conditionally initialize Analytics only in browser environment with error handling
+export let analytics = null;
+try {
+  analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+} catch (error) {
+  console.error("Failed to initialize Firebase Analytics:", error);
+}
 export const storage = getStorage(app);
 export default app; 
