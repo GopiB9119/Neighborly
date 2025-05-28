@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode, SetStateAction } from "react";
 import { auth, db } from "../firebase";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Black_And_White_Picture } from "next/font/google";
+import { DefaultColors } from "tailwindcss/types/generated/colors";
 
 interface Post {
+  [x: string]: ReactNode;
+  status: string;
   id: string;
   message: string;
   location: string;
@@ -15,6 +18,9 @@ interface Post {
   userId: string;
   email: string;
   timestamp: string;
+  statusColor: string;
+  statusOptions: string[];
+
 }
 
 export default function Home() {
@@ -24,7 +30,12 @@ export default function Home() {
   const [category, setCategory] = useState("Offer"); // Default category
   const [filterCategory, setFilterCategory] = useState("All"); // Filter for displaying posts
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState("Available");
+  const [statusColor, setStatusColor] = useState("text-green-600");
+  const [statusOptions, setStatusOptions] = useState("");
   const router = useRouter();
+  
+
 
   // Check if user is logged in
   useEffect(() => {
@@ -32,6 +43,7 @@ export default function Home() {
       router.push("/login");
     }
   }, [router]);
+
 
   // Fetch posts from Firestore with real-time updates
   useEffect(() => {
@@ -62,6 +74,9 @@ export default function Home() {
           message,
           location,
           category,
+          status,
+          statusColor: statusColor,
+          statusOptions: statusOptions,
           userId: auth.currentUser.uid,
           email: auth.currentUser.email,
           timestamp: new Date().toISOString(),
@@ -97,7 +112,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-7 flex justify-between items-center">
           <div className="flex items-center gap-4 min-w-0">
             <NeighborlyLogo size={48} />
-            <span className="text-4xl font-extrabold tracking-tight truncate font-logo drop-shadow-lg" style={{color:"black"}}>Neighborly</span>
+            <span className="text-4xl font-extrabold tracking-tight truncate font-logo drop-shadow-lg" style={{color:"black"}}>Neighborly<span className="ml-1 animate-heartbeatColorCycle">.</span></span>
           </div>
           <div>
             <span className="mr-6 text-base text-secondary font-medium" style={{color:"green"}}>Welcome, {auth.currentUser?.email || 'User'}</span>
@@ -150,7 +165,7 @@ export default function Home() {
 
           {/* Post Creation Form */}
           <div className="bg-card-bg rounded-2xl shadow-lg p-6 mb-10 border border-card-border">
-            <h3 className="text-2xl font-bold mb-4 text-foreground font-logo">Share with Your Neighbors</h3>
+            <h3 className="text-2xl font-bold mb-4 text-foreground font-logo">Share with Your Neighbors<span className="ml-1 animate-heartbeatColorCycle">.</span></h3>
             <div className="mb-4">
               <label className="block mb-2 text-base font-bold text-foreground">Post Category:</label>
               <select
@@ -163,7 +178,27 @@ export default function Home() {
                     {cat}
                   </option>
                 ))}
-              </select>
+                  </select>
+                 
+                 <label className="block mb-2 text-base font-bold text-foreground">Status</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="border border-border rounded-lg p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground bg-card-bg"
+                > 
+                {Array.isArray(statusOptions) && statusOptions.map((status: string) => (
+                    <option key={status}  value={status}  className="text-foreground">
+                      {status}
+                    </option>
+                  ))}
+                      <option value="Available" style={{color: "green"}} >Available</option>
+                  <option value="Unavailable" style={{color: "red"}}>Unavailable</option>
+                  <option value="Pending" style={{color: "yellow"}}>Pending</option>
+                  <option value="Completed" style={{color: "blue"}}>Completed</option>
+
+                </select>
+
+          
             </div>
             <textarea
               placeholder="Post a message (e.g., Need a ladder, Free apples)"
@@ -186,19 +221,32 @@ export default function Home() {
           <h3 className="text-2xl font-bold mb-6 text-foreground font-logo">Recent Posts</h3>
           {posts.length === 0 ? (
             <div className="bg-card-bg rounded-2xl shadow p-8 text-center text-secondary border border-card-border">
+
               <p className="text-lg font-medium">No posts yet. Be the first to share something with your community!</p>
             </div>
           ) : (
             <ul className="space-y-6">
               {posts.map((post) => (
+                
                 <li key={post.id} className="bg-card-bg rounded-2xl shadow-lg p-6 border border-card-border hover:shadow-2xl transition-shadow">
                   <div className="flex justify-between items-center mb-2">
-                    <span className={`px-3 py-1 text-xs font-bold rounded-full ${getCategoryStyle(post.category)} shadow-sm tracking-wide uppercase font-logo`}>{post.category}</span>
+                    <span className={`px-3 py-1 text-xs font-bold rounded-full ${getCategoryStyle(post.category)} shadow-sm tracking-wide uppercase font-logo`}><span style={{color:"rgb(22 163 74 / var(--tw-text-opacity, 1))"}}>{post.category}</span></span>
                     <p className="text-xs text-secondary font-mono">
-                      {new Date(post.timestamp).toLocaleTimeString()} • {new Date(post.timestamp).toLocaleDateString()}
+                      {new Date(post.timestamp).toISOString().slice(11, 19)} <span style={{color:"rgb(22 163 74 / var(--tw-text-opacity, 1))"}}>•</span> {new Date(post.timestamp).toISOString().slice(0, 10)}
                     </p>
                   </div>
+                
                   <p className="text-foreground font-semibold mb-2 text-lg">{post.message}</p>
+                  <p className="text-sm text-secondary">
+                    Category: <span className="font-bold text-foreground">{post.category}</span>
+                  </p>
+                  <p className="text-sm text-secondary">
+                    Location: <span className="font-bold text-foreground">{post.location}</span>
+                  </p>
+                  <p className="text-sm text-secondary"> 
+                    Status: 
+                    <span className={`font-bold text-foreground ${post.statusColor}`} style={{color: post.statusColor}}>{post.status}</span>
+                  </p>
                   <p className="text-sm text-secondary">
                     Posted by <span className="font-bold text-foreground">{post.email}</span>
                   </p>

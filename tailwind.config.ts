@@ -19,7 +19,23 @@ export default {
         "card-bg": "var(--card-bg)",
         "card-border": "var(--card-border)",
       },
+      keyframes: {
+        heartbeat: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.4)', opacity: '0.6' },
+        },
+        colorCycle: {
+          '0%, 100%': { color: '#26890d' },      // green
+          '50%': { color: '#000000' },           // black
+        },
+      },
+      animation: {
+        heartbeat: 'heartbeat 1.2s infinite',
+        colorCycle: 'colorCycle 3.6s infinite',
+        heartbeatColorCycle: 'heartbeat 1.2s infinite, colorCycle 3.6s infinite',
+      },
     },
+  
   },
   plugins: [],
 } satisfies Config;

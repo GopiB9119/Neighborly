@@ -100,3 +100,27 @@ button.btn-blue {
   background-color: #0072C6 !important;
   color: #fff !important;
 }
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.6;
+  }
+}
+.animate-heartbeat {
+  animation: heartBeat 1.2s infinite;
+}
+
+@keyframes underline {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+

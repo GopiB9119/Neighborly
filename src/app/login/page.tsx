@@ -78,9 +78,10 @@ export function NeighborlyLogo({
           />
         </svg>
       </div>
-      <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800 font-logo drop-shadow-sm select-none ">
-        Neighborly
-      </span>
+      <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800 font-logo drop-shadow-sm select-none" style={{ color: 'white' }}>
+  Neighborly
+  <span className="ml-1 animate-heartbeatColorCycle">.</span>
+</span>
     </div>
   );
 }
@@ -131,62 +132,66 @@ export default function Login() {
         <p className="mb-6 text-secondary text-center text-base md:text-lg">
           Sign in or create an account to connect with your neighbors
         </p>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border border-card-border rounded-md p-3 mb-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground bg-card-bg"
-        />
-        <div className="relative w-full mb-3">
+        <form className="w-full">
           <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-card-border rounded-md p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground bg-card-bg"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border border-card-border rounded-md p-3 mb-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground bg-card-bg"
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary-dark focus:outline-none"
-            aria-label={showPassword ? "Hide password" : "Show password"}
-          >
-            {showPassword ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.657.336-3.236.938-4.675m1.675-2.175A9.956 9.956 0 0112 3c5.523 0 10 4.477 10 10 0 1.657-.336 3.236-.938 4.675m-1.675 2.175A9.956 9.956 0 0112 21c-1.657 0-3.236-.336-4.675-.938m-2.175-1.675A9.956 9.956 0 013 12c0-1.657.336-3.236.938-4.675m1.675-2.175A9.956 9.956 0 0112 3c1.657 0 3.236.336 4.675.938m2.175 1.675A9.956 9.956 0 0121 12c0 1.657-.336 3.236-.938 4.675m-1.675 2.175A9.956 9.956 0 0112 21c-1.657 0-3.236-.336-4.675-.938" /></svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-6 0a6 6 0 1112 0 6 6 0 01-12 0z" /></svg>
-            )}
-          </button>
-        </div>
-        <div className="flex gap-2 w-full mb-3">
-          <button
-            onClick={async () => {
-              try {
-                await signInWithEmailAndPassword(auth, email, password);
-                router.push("/");
-              } catch (err: unknown) {
-                setError(err instanceof Error ? err.message : "An error occurred");
-              }
-            }}
-            className="flex-1 bg-card-bg text-foreground py-2 rounded-md font-semibold border border-card-border hover:bg-primary hover:text-white transition-colors shadow-sm"
-          >
-            Login
-          </button>
-          <button
-            onClick={async () => {
-              try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                router.push("/");
-              } catch (err: unknown) {
-                setError(err instanceof Error ? err.message : "An error occurred");
-              }
-            }}
-            className="flex-1 bg-primary text-white py-2 rounded-md font-semibold border border-primary-dark hover:bg-primary-dark hover:text-white transition-colors shadow-sm"
-          >
-            Signup
-          </button>
-        </div>
+          <div className="relative w-full mb-3">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border border-card-border rounded-md p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground bg-card-bg"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary-dark focus:outline-none"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.657.336-3.236.938-4.675m1.675-2.175A9.956 9.956 0 0112 3c5.523 0 10 4.477 10 10 0 1.657-.336 3.236-.938 4.675m-1.675 2.175A9.956 9.956 0 0112 21c-1.657 0-3.236-.336-4.675-.938m-2.175-1.675A9.956 9.956 0 013 12c0-1.657.336-3.236.938-4.675m1.675-2.175A9.956 9.956 0 0112 3c1.657 0 3.236.336 4.675.938m2.175 1.675A9.956 9.956 0 0121 12c0 1.657-.336 3.236-.938 4.675m-1.675 2.175A9.956 9.956 0 0112 21c-1.657 0-3.236-.336-4.675-.938" /></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-6 0a6 6 0 1112 0 6 6 0 01-12 0z" /></svg>
+              )}
+            </button>
+          </div>
+          <div className="flex gap-2 w-full mb-3">
+            <button
+              onClick={async () => {
+                try {
+                  await signInWithEmailAndPassword(auth, email, password);
+                  router.push("/");
+                } catch (err: unknown) {
+                  setError(err instanceof Error ? err.message : "An error occurred");
+                }
+              }}
+              className="flex-1 bg-card-bg text-foreground py-2 rounded-md font-semibold border border-card-border hover:bg-primary hover:text-white transition-colors shadow-sm"
+              type="button"
+            >
+              Login
+            </button>
+            <button
+              onClick={async () => {
+                try {
+                  await createUserWithEmailAndPassword(auth, email, password);
+                  router.push("/");
+                } catch (err: unknown) {
+                  setError(err instanceof Error ? err.message : "An error occurred");
+                }
+              }}
+              className="flex-1 bg-primary text-white py-2 rounded-md font-semibold border border-primary-dark hover:bg-primary-dark hover:text-white transition-colors shadow-sm"
+              type="button"
+            >
+              Signup
+            </button>
+          </div>
+        </form>
         {error && (
           <p className="text-red-600 bg-red-50 border border-red-300 rounded-md p-3 w-full text-center mt-2">
             {error}
