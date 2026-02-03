@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useEffect, ReactNode, SetStateAction } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { auth, db } from "../firebase";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Black_And_White_Picture } from "next/font/google";
-import { DefaultColors } from "tailwindcss/types/generated/colors";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { POST_CATEGORIES, STATUS_OPTIONS, getStatusColor } from "../postOptions";
 
 interface Post {
-  [x: string]: ReactNode;
   status: string;
   id: string;
   message: string;
@@ -20,8 +18,6 @@ interface Post {
   email: string;
   timestamp: string;
   statusColor: string;
-  statusOptions: string[];
-
 }
 
 export default function Home() {
@@ -32,8 +28,7 @@ export default function Home() {
   const [filterCategory, setFilterCategory] = useState("All"); // Filter for displaying posts
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("Available");
-  const [statusColor, setStatusColor] = useState("text-green-600");
-  const [statusOptions, setStatusOptions] = useState("");
+  const [statusColor, setStatusColor] = useState(getStatusColor("Available"));
   const router = useRouter();
   
 
@@ -76,8 +71,7 @@ export default function Home() {
           location,
           category,
           status,
-          statusColor: statusColor,
-          statusOptions: statusOptions,
+          statusColor,
           userId: auth.currentUser.uid,
           email: auth.currentUser.email,
           timestamp: new Date().toISOString(),
@@ -102,9 +96,9 @@ export default function Home() {
     }
   };
 
-  // Simulated geolocation filter (replace with Google Maps API later)
+  const statusOptions = useMemo(() => STATUS_OPTIONS, []);
   const locations = ["Building A", "Building B", "Street 1"];
-  const categories = ["Offer", "Request", "Announcement"];
+  const categories = useMemo(() => POST_CATEGORIES, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -114,7 +108,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-7 flex justify-between items-center">
           <div className="flex items-center gap-4 min-w-0">
             <NeighborlyLogo size={48} />
-            <span className="text-4xl font-extrabold tracking-tight truncate font-logo drop-shadow-lg" style={{color:"black"}}>Neighborly<span className="ml-1 animate-heartbeatColorCycle">.</span></span>
+            <span className="text-4xl font-extrabold tracking-tight truncate font-logo drop-shadow-lg" style={{color:"black"}}>Neighborly<span className="ml-1 animate-heartbeat">.</span></span>
           </div>
           <div>
             <span className="mr-6 text-base text-secondary font-medium" style={{color:"green"}}>Welcome, {auth.currentUser?.email || 'User'}</span>
@@ -167,7 +161,7 @@ export default function Home() {
 
           {/* Post Creation Form */}
           <div className="bg-card-bg rounded-2xl shadow-lg p-6 mb-10 border border-card-border">
-            <h3 className="text-2xl font-bold mb-4 text-foreground font-logo">Share with Your Neighbors<span className="ml-1 animate-heartbeatColorCycle">.</span></h3>
+            <h3 className="text-2xl font-bold mb-4 text-foreground font-logo">Share with Your Neighbors<span className="ml-1 animate-heartbeat">.</span></h3>
             <div className="mb-4">
               <label className="block mb-2 text-base font-bold text-foreground">Post Category:</label>
               <select
@@ -185,18 +179,18 @@ export default function Home() {
                  <label className="block mb-2 text-base font-bold text-foreground">Status</label>
                 <select
                   value={status}
-                  onChange={(e) => setStatus(e.target.value)}
+                  onChange={(e) => {
+                    const nextStatus = e.target.value;
+                    setStatus(nextStatus);
+                    setStatusColor(getStatusColor(nextStatus));
+                  }}
                   className="border border-border rounded-lg p-3 w-full focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-foreground bg-card-bg"
                 > 
-                {Array.isArray(statusOptions) && statusOptions.map((status: string) => (
-                    <option key={status}  value={status}  className="text-foreground">
-                      {status}
+                {statusOptions.map((option) => (
+                    <option key={option} value={option} className="text-foreground">
+                      {option}
                     </option>
                   ))}
-                      <option value="Available" style={{color: "green"}} >Available</option>
-                  <option value="Unavailable" style={{color: "red"}}>Unavailable</option>
-                  <option value="Pending" style={{color: "yellow"}}>Pending</option>
-                  <option value="Completed" style={{color: "blue"}}>Completed</option>
 
                 </select>
 
@@ -247,7 +241,7 @@ export default function Home() {
                   </p>
                   <p className="text-sm text-secondary"> 
                     Status: 
-                    <span className={`font-bold text-foreground ${post.statusColor}`} style={{color: post.statusColor}}>{post.status}</span>
+                    <span className={`font-bold text-foreground ${post.statusColor}`}>{post.status}</span>
                   </p>
                   <p className="text-sm text-secondary">
                     Posted by <span className="font-bold text-foreground">{post.email}</span>

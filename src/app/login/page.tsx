@@ -80,7 +80,7 @@ export function NeighborlyLogo({
       </div>
       <span className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800 font-logo drop-shadow-sm select-none" style={{ color: 'white' }}>
   Neighborly
-  <span className="ml-1 animate-heartbeatColorCycle">.</span>
+  <span className="ml-1 animate-heartbeat">.</span>
 </span>
     </div>
   );
